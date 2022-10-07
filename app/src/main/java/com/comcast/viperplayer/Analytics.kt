@@ -9,57 +9,52 @@ import androidx.media3.exoplayer.DecoderReuseEvaluation
 import androidx.media3.exoplayer.analytics.AnalyticsCollector
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.exoplayer.source.MediaSource
-import com.comcast.viperplayer.data.Analytics
-import com.comcast.viperplayer.data.Event
+import com.comcast.viperplayer.data.ViperAppEvent
 
-fun Analytics.post(event: Event) {
-    // Event(track = "", tag = TAG.BEGIN_PLAYBACK)
-}
-
-fun log(from: String, message: String) {
-
-    println("[$from] :: [$message]")
-}
 
 @UnstableApi
-class ViperAnalyticsCollector() : AnalyticsCollector {
+class ViperAnalyticsCollector(private val manager: PlayerManager) : AnalyticsCollector {
+    private fun sendEvents(from: String, message: String) {
+        manager.getReporter().report(ViperAppEvent.DETAILED_ANALYTICS, "[$from] :: [$message]")
+    }
+
     override fun onRenderedFirstFrame(output: Any, renderTimeMs: Long) {
-        log("onRenderedFirstFrame", "$renderTimeMs")
+        sendEvents("onRenderedFirstFrame", "$renderTimeMs")
     }
 
     override fun onBandwidthSample(elapsedMs: Int, bytesTransferred: Long, bitrateEstimate: Long) {
-        log("onBandwidthSample", "$elapsedMs : $bytesTransferred : $bitrateEstimate")
+        sendEvents("onBandwidthSample", "$elapsedMs : $bytesTransferred : $bitrateEstimate")
     }
 
     override fun addListener(listener: AnalyticsListener) {
-        log("addListener", "$listener")
+        sendEvents("addListener", "$listener")
     }
 
     override fun removeListener(listener: AnalyticsListener) {
-        log("removeListener", "$listener")
+        sendEvents("removeListener", "$listener")
     }
 
     override fun setPlayer(player: Player, looper: Looper) {
-        println("setPlayer [$player]")
+        sendEvents("setPlayer [$player]", "")
     }
 
     override fun release() {
-        log("release", "")
+        sendEvents("release", "")
     }
 
     override fun updateMediaPeriodQueueInfo(
         queue: MutableList<MediaSource.MediaPeriodId>,
         readingPeriod: MediaSource.MediaPeriodId?
     ) {
-        log("updateMediaPeriodQueueInfo", "${readingPeriod?.periodUid}")
+        sendEvents("updateMediaPeriodQueueInfo", "${readingPeriod?.periodUid}")
     }
 
     override fun notifySeekStarted() {
-        log("notifySeekStarted", "")
+        sendEvents("notifySeekStarted", "")
     }
 
     override fun onAudioEnabled(counters: DecoderCounters) {
-        log("onAudioEnabled", "$counters")
+        sendEvents("onAudioEnabled", "$counters")
     }
 
     override fun onAudioDecoderInitialized(
@@ -67,18 +62,18 @@ class ViperAnalyticsCollector() : AnalyticsCollector {
         initializedTimestampMs: Long,
         initializationDurationMs: Long
     ) {
-        log("onAudioDecoderInitialized", "")
+        sendEvents("onAudioDecoderInitialized", "")
     }
 
     override fun onAudioInputFormatChanged(
         format: Format,
         decoderReuseEvaluation: DecoderReuseEvaluation?
     ) {
-        log("onAudioInputFormatChanged", "")
+        sendEvents("onAudioInputFormatChanged", "")
     }
 
     override fun onAudioPositionAdvancing(playoutStartSystemTimeMs: Long) {
-        log("onAudioPositionAdvancing", "")
+        sendEvents("onAudioPositionAdvancing", "")
     }
 
     override fun onAudioUnderrun(
@@ -86,27 +81,27 @@ class ViperAnalyticsCollector() : AnalyticsCollector {
         bufferSizeMs: Long,
         elapsedSinceLastFeedMs: Long
     ) {
-        log("onAudioUnderrun", "")
+        sendEvents("onAudioUnderrun", "")
     }
 
     override fun onAudioDecoderReleased(decoderName: String) {
-        log("onAudioDecoderReleased", "")
+        sendEvents("onAudioDecoderReleased", "")
     }
 
     override fun onAudioDisabled(counters: DecoderCounters) {
-        log("onAudioDisabled", "")
+        sendEvents("onAudioDisabled", "")
     }
 
     override fun onAudioSinkError(audioSinkError: Exception) {
-        log("onAudioSinkError", "")
+        sendEvents("onAudioSinkError", "")
     }
 
     override fun onAudioCodecError(audioCodecError: Exception) {
-        log("onAudioCodecError", "")
+        sendEvents("onAudioCodecError", "")
     }
 
     override fun onVideoEnabled(counters: DecoderCounters) {
-        log("onVideoEnabled", "")
+        sendEvents("onVideoEnabled", "")
     }
 
     override fun onVideoDecoderInitialized(
@@ -114,34 +109,34 @@ class ViperAnalyticsCollector() : AnalyticsCollector {
         initializedTimestampMs: Long,
         initializationDurationMs: Long
     ) {
-        log("onVideoDecoderInitialized", "")
+        sendEvents("onVideoDecoderInitialized", "")
     }
 
     override fun onVideoInputFormatChanged(
         format: Format,
         decoderReuseEvaluation: DecoderReuseEvaluation?
     ) {
-        log("onVideoInputFormatChanged", "")
+        sendEvents("onVideoInputFormatChanged", "")
     }
 
     override fun onDroppedFrames(count: Int, elapsedMs: Long) {
-        log("onDroppedFrames", "")
+        sendEvents("onDroppedFrames", "")
     }
 
     override fun onVideoDecoderReleased(decoderName: String) {
-        log("onVideoDecoderReleased", "")
+        sendEvents("onVideoDecoderReleased", "")
     }
 
     override fun onVideoDisabled(counters: DecoderCounters) {
-        log("onVideoDisabled", "")
+        sendEvents("onVideoDisabled", "")
     }
 
     override fun onVideoFrameProcessingOffset(totalProcessingOffsetUs: Long, frameCount: Int) {
-        log("onVideoFrameProcessingOffset", "")
+        sendEvents("onVideoFrameProcessingOffset", "")
     }
 
     override fun onVideoCodecError(videoCodecError: Exception) {
-        log("onVideoCodecError", "")
+        sendEvents("onVideoCodecError", "")
     }
 
 }
