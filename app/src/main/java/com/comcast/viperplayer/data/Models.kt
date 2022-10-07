@@ -1,13 +1,15 @@
 package com.comcast.viperplayer.data
 
-data class Event(val track: String, val tag: TAG, val position: Int = 0)
+//data class Event(val track: String, val tag: TAG, val position: Int = 0)
 
 data class Analytics(val tag: String)
 
 data class Log(val tag: String, val msg: String)
 
 
-enum class TAG {
+enum class Event {
+    IDLE,
+    BUFFERING,
     BEGIN_PLAYBACK,
     END_PLAYBACK,
     PROGRESS_PLAYBACK,

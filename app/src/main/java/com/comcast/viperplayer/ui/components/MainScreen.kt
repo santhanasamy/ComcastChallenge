@@ -16,7 +16,7 @@ fun MainScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Comcast | Viper | Player", color = Color.White) },
+                title = { Text("COMCAST | Viper | Player", color = Color.White) },
                 backgroundColor = Color(0xff0f9d58)
             )
         },
