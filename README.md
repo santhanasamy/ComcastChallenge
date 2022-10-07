@@ -1,4 +1,4 @@
-# Comcost Code Challenge
+# Comcast Code Challenge
 Create a minimal video player app that uses ExoPlayer. The app should launch into a full-screen player activity and begin playing the video below. No time needs to be spent on a UI or handling cases like orientation changes.
  
 Add a basic analytics component that reports the following playback events:
