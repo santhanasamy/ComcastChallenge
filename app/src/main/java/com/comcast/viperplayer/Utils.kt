@@ -8,12 +8,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import kotlin.properties.Delegates
 
-var status: Boolean by Delegates.observable(true) { _, previous, current ->
-    if (previous != current) {
-
-    }
-}
-
 @SuppressLint("InlinedApi")
 fun Activity.hideSystemUi(videoView: View) {
     WindowCompat.setDecorFitsSystemWindows(window, false)

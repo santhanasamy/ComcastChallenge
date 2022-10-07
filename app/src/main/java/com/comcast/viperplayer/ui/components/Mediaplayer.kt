@@ -11,16 +11,25 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSourceFactory
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.analytics.AnalyticsCollector
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
-import com.comcast.viperplayer.ViperAnalyticsCollector
+import com.comcast.viperplayer.data.TRACK_POSITION_UPDATE_INTERVAL
 import com.comcast.viperplayer.data.VIDEO_URL
 import com.comcast.viperplayer.ui.theme.ViperPlayerTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.withContext
 
 @Composable
 @OptIn(UnstableApi::class)
-fun ViperPlayer(uri: State<String>, collector: ViperAnalyticsCollector? = null) {
+fun ViperPlayer(
+    uri: State<String>,
+    collector: AnalyticsCollector? = null,
+    positionTracker: Channel<Long>? = null
+) {
 
     val videoUri = remember { uri }
     val context = LocalContext.current
@@ -39,6 +48,22 @@ fun ViperPlayer(uri: State<String>, collector: ViperAnalyticsCollector? = null) 
         prepare()
     }
 
+    // Update media player position in periodic interval
+    val ticker = ticker(TRACK_POSITION_UPDATE_INTERVAL)
+    positionTracker?.let { trackerChannel ->
+        LaunchedEffect(key1 = "progress tracker", block = {
+            withContext(Dispatchers.IO) {
+                ticker.let {
+                    for (event in it) {
+                        withContext(Dispatchers.Main) {
+                            trackerChannel.trySend(viperPlayer.currentPosition)
+                        }
+                    }
+                }
+            }
+        })
+    }
+
     DisposableEffect(
         AndroidView(factory = {
             PlayerView(context).apply {
@@ -48,7 +73,10 @@ fun ViperPlayer(uri: State<String>, collector: ViperAnalyticsCollector? = null) 
             }
         })
     ) {
-        onDispose { viperPlayer.release() }
+        onDispose {
+            viperPlayer.release()
+            ticker.cancel()
+        }
     }
 }
 

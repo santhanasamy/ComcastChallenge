@@ -22,7 +22,7 @@ fun MainScreen(playerViewModel: PlayerViewModel) {
             )
         },
         content = {
-            ViperPlayer(playerViewModel.videoToPlay, playerViewModel.analyticsCollector)
+            ViperPlayer(playerViewModel.videoToPlay, playerViewModel.analyticsCollector, playerViewModel.positionTracker)
         }
     )
 }
