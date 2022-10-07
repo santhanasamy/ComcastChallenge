@@ -15,3 +15,36 @@ Bonus:
 - Some level of unit tests for the analytics component
 - There is a clear separation between the app, player, and analytics components.
 has context menu
+---
+# Solution
+---
+## Application Layers
+
+* Media player UI Components:
+
+![MediaPlayer UI Components](./assets/README-1665155804041.png)
+
+* Analytics handled by the "ViperReporter.kt" and the reporting integration can be switched between
+   - **Local logging** 
+   - **External analytical logging**
+
+* Requirement specific events are filtered and reported through following tags,
+  - PLAYER_BIT_RATE_CHANGE (Bitrate changes that includes information about the previous and new bitrate)
+  - PLAYER_PLAYBACK (Event when playback begins)
+  - PLAYER_TRACK_CHANGE (Information about the selected track(s))
+  - PLAYER_TRACK_POSITION (Event sent every second that includes the current player position)
+  - PLAYER_ANALYTICS (All other events)
+  
+* All other integration logics were kept inside the "PlayerViewModel.kt"
+
+## Sample Event Reporting
+* Playback position
+* Playback status [Buffering/Begin]
+* Selected Track details
+
+![Event Reporting](./assets/README-1665155548291.png)
+
+
+## Screen shot
+
+![Application ScreenShot](./assets/README-1665156220849.png)
