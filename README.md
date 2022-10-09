@@ -14,7 +14,7 @@ Bonus:
 - Written in Kotlin
 - Some level of unit tests for the analytics component
 - There is a clear separation between the app, player, and analytics components.
-has context menu
+
 ---
 # Solution
 ---
